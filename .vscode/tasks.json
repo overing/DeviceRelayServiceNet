@@ -1,0 +1,58 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build",
+			"type": "dotnet",
+			"task": "build",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "publish linux-arm64",
+			"type": "process",
+			"command": "dotnet",
+			"args": [
+				"publish",
+				"-r",
+				"linux-arm64",
+				"-p:PublishAot=True",
+				"-p:DebugType=None",
+				"-P:DebugSymbols=False"
+			],
+			"presentation": {
+				"reveal": "silent",
+				"focus": true,
+				"close": true,
+				"panel": "new"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			}
+		},
+		{
+			"label": "upload to remote",
+			"type": "process",
+			"command": "scp",
+			"args": [
+				"-i",
+				"${workspaceFolder}/target-cert.ppk",
+				"${workspaceFolder}/artifacts/publish/DeviceRelayServiceNet/release_linux-arm64/DeviceRelayServiceNet",
+				"p@172.16.17.11:/home/p/DeviceRelayServiceNet"
+			],
+			"presentation": {
+				"reveal": "silent",
+				"focus": true,
+				"close": true,
+				"panel": "new"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			}
+		}
+	]
+}
